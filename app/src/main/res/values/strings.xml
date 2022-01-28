@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Listation</string>
+    <string name="default_list_name">Lista</string>
+    <string name="default_item_count">0/0</string>
 </resources>
