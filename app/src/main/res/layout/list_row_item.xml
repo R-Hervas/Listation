@@ -49,7 +49,7 @@
                     android:layout_marginStart="10dp"
                     android:src="@android:drawable/ic_menu"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
 
             </LinearLayout>
 
