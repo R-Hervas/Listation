@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="everyday_green">#1C9E11</color>
     <color name="background_gray">#D1CFCF</color>
+    <color name="everyday_blue">#0B63A6</color>
+
 </resources>

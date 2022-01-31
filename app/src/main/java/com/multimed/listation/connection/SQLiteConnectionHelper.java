@@ -15,8 +15,8 @@ public class SQLiteConnectionHelper extends SQLiteOpenHelper {
 
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public SQLiteConnectionHelper(@Nullable Context context, @Nullable String name, int version, @NonNull SQLiteDatabase.OpenParams openParams) {
-        super(context, name, version, openParams);
+    public SQLiteConnectionHelper(@Nullable Context context, @Nullable String name,@Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
     }
 
     @Override

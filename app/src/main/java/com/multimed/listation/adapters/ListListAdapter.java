@@ -40,7 +40,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
     @Override
     public int getItemCount() {
-        return 0;
+        return localDataBase.getCount();
     }
 
     public class ListViewHolder extends RecyclerView.ViewHolder{

@@ -14,14 +14,14 @@ public class Utilities {
 
     //Table creation statements
     public static final String CREATE_TABLE_LIST =
-            "CREATE TABLE" + TABLE_LIST + " (" + FIELD_ID + " INTEGER, " + FIELD_NAME + "TEXT) ";
+            "CREATE TABLE " + TABLE_LIST + " (" + FIELD_ID + " INTEGER, " + FIELD_NAME + " TEXT) ";
     public static final String CREATE_TABLE_ITEM =
-            "CREATE TABLE" + TABLE_ITEM + " (" + FIELD_ID + " INTEGER, " + FIELD_NAME + "TEXT, " +
+            "CREATE TABLE " + TABLE_ITEM + " (" + FIELD_ID + " INTEGER, " + FIELD_NAME + " TEXT, " +
             FIELD_AMOUNT + " INTEGER, " + FIELD_LIST + " INTEGER)";
 
 
     //Table drop if exits statements
-    public static final String DROP_IFEXITS_LIST = "DROP TABLE IF EXISTS " + TABLE_LIST;
-    public static final String DROP_IFEXITS_ITEM = "DROP TABLE IF EXISTS " + TABLE_ITEM;
+    public static final String DROP_IFEXITS_LIST = " DROP TABLE IF EXISTS " + TABLE_LIST;
+    public static final String DROP_IFEXITS_ITEM = " DROP TABLE IF EXISTS " + TABLE_ITEM;
 
 }
