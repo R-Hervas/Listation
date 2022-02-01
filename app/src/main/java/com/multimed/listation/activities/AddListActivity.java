@@ -1,13 +1,12 @@
 package com.multimed.listation.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.Animator;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.multimed.listation.R;
 
@@ -31,15 +30,11 @@ public class AddListActivity extends AppCompatActivity {
                     @Override
                     public void onGlobalLayout() {
                         revealActivity();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN){
-                            rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        } else {
-                            rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
+                        rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 });
             }
-        };
+        }
     }
 
     private void revealActivity() {
