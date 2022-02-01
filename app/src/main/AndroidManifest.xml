@@ -10,9 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Listation">
         <activity
+            android:name=".activities.ListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AddListActivity"
-            android:theme="@style/Theme.Transparent"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

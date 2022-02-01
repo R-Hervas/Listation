@@ -13,7 +13,42 @@
         android:background="@color/everyday_blue"
         >
 
-        <!-- Insert your actual layout here -->
+        <ImageButton
+            android:id="@+id/btn_new_list_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:backgroundTint="#00FFFFFF"
+            android:foregroundTint="@color/white"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@color/white"
+           android:layout_marginVertical="100dp"
+           android:layout_marginHorizontal="40dp"
+           android:orientation="vertical"
+           android:elevation="20dp">
+
+           <EditText
+               android:id="@+id/input_newList"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:hint="Nueva lista"
+               android:layout_margin="10dp"/>
+
+           <Button
+               android:id="@+id/btn_add_new_list"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:foregroundGravity="center_horizontal|bottom"
+               android:layout_marginStart="250dp"
+               android:text="Crear"
+               android:backgroundTint="@color/white"
+               android:textColor="@color/everyday_blue"
+               android:stateListAnimator="@null" />
+
+       </LinearLayout>
 
     </FrameLayout>
 

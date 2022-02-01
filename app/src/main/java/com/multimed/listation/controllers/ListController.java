@@ -13,7 +13,6 @@ import java.security.Policy;
 
 public class ListController {
 
-
     public static Cursor getAllLists(@NonNull SQLiteConnectionHelper conn){
         SQLiteDatabase db = conn.getReadableDatabase();
 
@@ -25,5 +24,23 @@ public class ListController {
         String[] parameters = {(id+"")};
 
         return db.rawQuery("SELECT * FROM " + Utilities.TABLE_LIST + " WHERE " + Utilities.FIELD_ID + " = ?", parameters);
+    }
+
+    public static void createNewList(@NonNull SQLiteConnectionHelper conn, @NonNull String name) {
+        SQLiteDatabase db = conn.getWritableDatabase();
+
+        String insert = Utilities.INSERT_LIST + "( '" + name + "' ) ";
+
+        db.execSQL(insert);
+
+        db.close();
+    }
+
+    public static Cursor getListItems(SQLiteConnectionHelper conn, int id) {
+        SQLiteDatabase db = conn.getReadableDatabase();
+        String[] parameters = {(id+"")};
+
+        return db.rawQuery("SELECT * FROM " + Utilities.TABLE_ITEM + " WHERE " + Utilities.FIELD_LIST + " = ?", parameters);
+
     }
 }

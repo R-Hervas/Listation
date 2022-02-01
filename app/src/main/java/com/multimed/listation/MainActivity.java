@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         listDataSet = ListController.getAllLists(conn);
 
-        ListListAdapter listListAdapter = new ListListAdapter(listDataSet, this);
+        ListListAdapter listListAdapter = new ListListAdapter(listDataSet, this, conn);
 
         listRecyclerView.setAdapter(listListAdapter);
 

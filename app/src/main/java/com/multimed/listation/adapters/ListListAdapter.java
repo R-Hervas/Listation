@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.multimed.listation.R;
+import com.multimed.listation.connection.SQLiteConnectionHelper;
+import com.multimed.listation.controllers.ListController;
 
 public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListViewHolder> {
 
@@ -18,9 +20,12 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
     Context context;
 
-    public ListListAdapter(Cursor localDataBase, Context context) {
+    SQLiteConnectionHelper conn;
+
+    public ListListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
         this.localDataBase = localDataBase;
         this.context = context;
+        this.conn = conn;
     }
 
     @NonNull
@@ -36,6 +41,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         localDataBase.move(position);
 
         holder.getLblName().setText(localDataBase.getString(1));
+        holder.getLblNumberItems().setText(ListController.getListItems(conn, localDataBase.getInt(0)).getCount() + "");
     }
 
     @Override
