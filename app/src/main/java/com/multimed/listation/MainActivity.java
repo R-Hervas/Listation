@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.multimed.listation.activities.AddListActivity;
 import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ListController;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         conn = new SQLiteConnectionHelper(this, "db_lists", null, 1);
 
         btnCreateList = findViewById(R.id.btn_list_add);
+        btnCreateList.setOnClickListener(view -> {
+            startActivity(new Intent(MainActivity.this, AddListActivity.class));
+        });
 
         listRecyclerView = findViewById(R.id.list_recycleview);
         listRecyclerView.setLayoutManager(new LinearLayoutManager(this));
