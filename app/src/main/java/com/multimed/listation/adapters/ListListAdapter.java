@@ -1,5 +1,6 @@
 package com.multimed.listation.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return new ListViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
         localDataBase.moveToFirst();
@@ -49,7 +51,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return localDataBase.getCount();
     }
 
-    public class ListViewHolder extends RecyclerView.ViewHolder{
+    public static class ListViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView lblName, lblNumberItems;
 

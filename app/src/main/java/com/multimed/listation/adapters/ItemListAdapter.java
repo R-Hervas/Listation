@@ -48,7 +48,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return localDataBase.getCount();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder{
+    public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView lblName, lblAmount;
 

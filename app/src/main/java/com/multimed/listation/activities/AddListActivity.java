@@ -77,9 +77,7 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
 
-        btnExit.setOnClickListener(view -> {
-            startActivity(new Intent(AddListActivity.this, MainActivity.class));
-        });
+        btnExit.setOnClickListener(view -> startActivity(new Intent(AddListActivity.this, MainActivity.class)));
     }
 
     private void revealActivity() {
