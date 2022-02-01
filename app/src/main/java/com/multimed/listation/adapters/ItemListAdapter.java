@@ -30,7 +30,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_row_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row_item, viewGroup, false);
         return new ItemViewHolder(view);
     }
 
@@ -40,7 +40,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         localDataBase.move(position);
 
         holder.getLblName().setText(localDataBase.getString(1));
-        holder.getLblAmount().setText(localDataBase.getInt(2));
+        holder.getLblAmount().setText(localDataBase.getInt(2) + "");
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
-        private final TextView lblName, lblAmount;
+        private TextView lblName, lblAmount;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -14,9 +14,9 @@ public class Utilities {
 
     //Table creation statements
     public static final String CREATE_TABLE_LIST =
-            "CREATE TABLE " + TABLE_LIST + " (" + FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENTAL, " + FIELD_NAME + " TEXT) ";
+            "CREATE TABLE " + TABLE_LIST + " (" + FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FIELD_NAME + " TEXT) ";
     public static final String CREATE_TABLE_ITEM =
-            "CREATE TABLE " + TABLE_ITEM + " (" + FIELD_ID + " INTEGERPRIMARY KEY AUTOINCREMENTAL, " + FIELD_NAME + " TEXT, " +
+            "CREATE TABLE " + TABLE_ITEM + " (" + FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FIELD_NAME + " TEXT, " +
             FIELD_AMOUNT + " INTEGER, " + FIELD_LIST + " INTEGER)";
 
 
@@ -26,5 +26,5 @@ public class Utilities {
 
     //Insert register statement
     public static final String INSERT_LIST = "INSERT INTO " + TABLE_LIST + "( " + FIELD_NAME + " ) VALUES";
-
+    public static final String INSERT_ITEM = "INSERT INTO " + TABLE_ITEM + "( " + FIELD_NAME + ", " +  FIELD_AMOUNT + ", "  + FIELD_LIST + " ) VALUES";
 }

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Listation">
         <activity
+            android:name=".activities.AddItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ListActivity"
             android:exported="false" />
         <activity
