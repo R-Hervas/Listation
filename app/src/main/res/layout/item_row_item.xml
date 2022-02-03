@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginStart="20dp"
                 android:text="Item 1" />
 
             <View
@@ -35,7 +36,8 @@
                 android:id="@+id/lbl_item_amount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="4"
+                android:gravity="end"
                 android:text="20" />
 
         </LinearLayout>
