@@ -3,4 +3,6 @@
     <string name="default_list_name">Lista</string>
     <string name="default_item_count">0</string>
     <string name="todo">TODO</string>
+    <string name="lbl_item_name_default">Not found</string>
+    <string name="lbl_item_amount_default">0</string>
 </resources>
