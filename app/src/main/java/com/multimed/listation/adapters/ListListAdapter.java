@@ -45,9 +45,12 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         localDataBase.moveToFirst();
         localDataBase.move(position);
 
+        Integer id = position + 1;
+
+        holder.setId(id);
         holder.getLblName().setText(localDataBase.getString(1));
-        holder.getLblNumberItems().setText(ListController.getListItems(conn, position).getCount() + "");
-        holder.setId(position);
+        holder.getLblNumberItems().setText(ListController.getListItems(conn, id).getCount() + "");
+
     }
 
     @Override

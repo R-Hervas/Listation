@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ListActivity"
-    android:background="@color/background_gray">
+    android:background="@color/background_gray"
+    tools:context=".activities.ListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="10dp">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/item_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="10dp"
-            android:elevation="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                android:elevation="10dp"/>
 
     </LinearLayout>
 
@@ -26,10 +26,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="Creating a new list"
+        android:contentDescription="@string/floatbtn_item_add_desc"
         android:foregroundGravity="right|bottom"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@color/everyday_blue"
+        android:foregroundGravity="right|bottom"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_item_add"
+        app:layout_constraintEnd_toEndOf="@+id/btn_item_add"
+        app:layout_constraintStart_toStartOf="@+id/btn_item_add"
+        app:layout_constraintTop_toTopOf="@+id/btn_item_add"></View>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

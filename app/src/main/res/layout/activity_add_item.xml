@@ -14,11 +14,12 @@
 
         <ImageButton
             android:id="@+id/btn_new_item_exit"
+            android:contentDescription="@string/cancel_create_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#00FFFFFF"
-            android:foregroundTint="@color/white"
-            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,17 +35,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Nuevo Producto" />
+                android:hint="@string/input_new_item_hint"
+                android:minHeight="48dp"
+                android:textColorHint="#757575"
+                android:autofillHints="no"
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/btn_add_new_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="250dp"
+                android:layout_marginStart="245dp"
                 android:backgroundTint="@color/white"
                 android:foregroundGravity="center_horizontal|bottom"
                 android:stateListAnimator="@null"
-                android:text="Crear"
+                android:text="@string/btn_create"
                 android:textColor="@color/everyday_blue" />
 
         </LinearLayout>

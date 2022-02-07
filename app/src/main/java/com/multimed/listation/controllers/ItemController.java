@@ -1,5 +1,6 @@
 package com.multimed.listation.controllers;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -19,9 +20,40 @@ public class ItemController {
 
         SQLiteDatabase db = conn.getWritableDatabase();
 
-        String insert = Utilities.INSERT_ITEM + " ( '" + name + "' , 1, " + listId + " )";
+        String insert = Utilities.INSERT_ITEM + " ( '" + name + "' , 1, " + listId + ", 0 )";
 
         db.execSQL(insert);
         db.close();
+    }
+
+    public static void updateItemAmount(SQLiteConnectionHelper conn, Integer id, int newAmount) {
+
+        SQLiteDatabase db = conn.getWritableDatabase();
+
+        String[] parameters = {id.toString()};
+
+        ContentValues values = new ContentValues();
+        values.put(Utilities.FIELD_AMOUNT, newAmount);
+
+        db.update(Utilities.TABLE_ITEM, values, Utilities.FIELD_ID + " = ?", parameters);
+
+        db.close();
+    }
+
+    public static void updateItemCheck(SQLiteConnectionHelper conn, Integer id, Integer checked) {
+
+        SQLiteDatabase db = conn.getWritableDatabase();
+
+        String[] parameters = {id.toString()};
+
+        ContentValues values = new ContentValues();
+
+        System.out.println(" GUARDO ESTO : " + checked);
+        values.put(Utilities.FIELD_CHECKED, checked);
+        int i = db.update(Utilities.TABLE_ITEM, values, Utilities.FIELD_ID + " = ? ", parameters);
+        System.out.println("He modificado estas lineas" + i);
+
+        db.close();
+
     }
 }

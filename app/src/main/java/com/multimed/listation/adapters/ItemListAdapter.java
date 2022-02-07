@@ -2,9 +2,14 @@ package com.multimed.listation.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.multimed.listation.R;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
+import com.multimed.listation.controllers.ItemController;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
 
@@ -39,8 +45,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         localDataBase.moveToFirst();
         localDataBase.move(position);
 
+        holder.setId(position + 1);
         holder.getLblName().setText(localDataBase.getString(1));
         holder.getLblAmount().setText(localDataBase.getInt(2) + "");
+        holder.getCheckBox().setChecked(localDataBase.getInt(4) == 1);
+
+
     }
 
     @Override
@@ -48,15 +58,33 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return localDataBase.getCount();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder{
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher {
 
         private TextView lblName, lblAmount;
+
+        private ImageButton btnLower, btnHighUp;
+
+        private CheckBox checkBox;
+
+        private Integer id = -1;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            this.checkBox = itemView.findViewById(R.id.chkd_item);
             this.lblName = itemView.findViewById(R.id.lbl_item_name);
             this.lblAmount = itemView.findViewById(R.id.lbl_item_amount);
+            this.btnHighUp = itemView.findViewById(R.id.btn_item_higher);
+            this.btnLower = itemView.findViewById(R.id.btn_item_lower);
+
+            checkBox.setOnClickListener(this::onClick);
+
+            btnLower.setOnClickListener(this::onClick);
+            btnHighUp.setOnClickListener(this::onClick);
+
+            lblAmount.addTextChangedListener(this);
+
+
         }
 
         public TextView getLblName() {
@@ -66,5 +94,60 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         public TextView getLblAmount() {
             return lblAmount;
         }
+
+        public CheckBox getCheckBox() {
+            return checkBox;
+        }
+
+        @Override
+        public void onClick(View view) {
+            int currentAmount = Integer.parseInt(lblAmount.getText().toString());
+
+            switch (view.getId()) {
+                case (R.id.btn_item_lower):
+                    ItemController.updateItemAmount(conn, id, --currentAmount);
+                    lblAmount.setText(currentAmount + "");
+                    break;
+                case (R.id.btn_item_higher):
+                    ItemController.updateItemAmount(conn, id, ++currentAmount);
+                    lblAmount.setText(currentAmount + "");
+                    break;
+                case (R.id.chkd_item):
+                    System.out.println("Traduzco esto - " + (checkBox.isChecked()? 1 : 0));
+
+                    int checked = checkBox.isChecked()? 1 : 0;
+                    ItemController.updateItemCheck(conn, id, checked);
+                    break;
+            }
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+
+        @Override
+        public void onTextChanged(CharSequence value, int i, int i1, int i2) {
+            if (Integer.parseInt(value.toString()) == 1) {
+                btnLower.setVisibility(View.INVISIBLE);
+            } else {
+                btnLower.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+
+        //Not used method needed to be overriden
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+
     }
 }

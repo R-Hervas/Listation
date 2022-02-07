@@ -5,4 +5,9 @@
     <string name="todo">TODO</string>
     <string name="lbl_item_name_default">Not found</string>
     <string name="lbl_item_amount_default">0</string>
+    <string name="floatbtn_item_add_desc">Creating a new item</string>
+    <string name="btn_create">Crear</string>
+    <string name="cancel_create_desc">Boton para salir de la pantalla</string>
+    <string name="input_new_item_hint">Nuevo Producto</string>
+    <string name="input_new_list_desc">Nueva lista</string>
 </resources>

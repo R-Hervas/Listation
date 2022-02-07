@@ -44,14 +44,15 @@ public class ListActivity extends AppCompatActivity {
 
         conn = new SQLiteConnectionHelper(this, "db_lists", null, 1);
 
+
         btnCreateItem = findViewById(R.id.btn_item_add);
         btnCreateItem.setOnClickListener(view -> {
             Intent intent = new Intent(ListActivity.this, AddItemActivity.class);
 
             Bundle bundle = new Bundle();
             bundle.putInt("LIST_ID", idList);
-
             intent.putExtras(bundle);
+
             startActivity(intent);
         });
 
