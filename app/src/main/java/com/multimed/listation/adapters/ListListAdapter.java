@@ -45,7 +45,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         localDataBase.moveToFirst();
         localDataBase.move(position);
 
-        Integer id = position + 1;
+        int id = position + 1;
 
         holder.setId(id);
         holder.getLblName().setText(localDataBase.getString(1));
@@ -68,7 +68,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             super(itemView);
             this.lblName = itemView.findViewById(R.id.lbl_list_name);
             this.lblNumberItems = itemView.findViewById(R.id.lbl_item_count);
-            itemView.setOnClickListener(this::onClick);
+            itemView.setOnClickListener(this);
         }
 
         public TextView getLblName() {

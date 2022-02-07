@@ -16,13 +16,6 @@ public class ListController {
         return db.rawQuery("SELECT * FROM " + Utilities.TABLE_LIST, null);
     }
 
-    public static Cursor getListById(@NonNull SQLiteConnectionHelper conn, int id){
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parameters = {(id+"")};
-
-        return db.rawQuery("SELECT * FROM " + Utilities.TABLE_LIST + " WHERE " + Utilities.FIELD_ID + " = ?", parameters);
-    }
-
     public static void createNewList(@NonNull SQLiteConnectionHelper conn, @NonNull String name) {
         SQLiteDatabase db = conn.getWritableDatabase();
 

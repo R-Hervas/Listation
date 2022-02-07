@@ -20,8 +20,6 @@ public class SQLiteConnectionHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //db.execSQL("DROP TABLE list");
-        //db.execSQL("DROP TABLE item");
         db.execSQL(Utilities.CREATE_TABLE_LIST);
         db.execSQL(Utilities.CREATE_TABLE_ITEM);
     }

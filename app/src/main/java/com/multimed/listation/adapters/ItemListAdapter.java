@@ -1,5 +1,6 @@
 package com.multimed.listation.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.Editable;
@@ -8,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -40,6 +40,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return new ItemViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         localDataBase.moveToFirst();
@@ -60,11 +61,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher {
 
-        private TextView lblName, lblAmount;
+        private final TextView lblName;
+        private final TextView lblAmount;
 
-        private ImageButton btnLower, btnHighUp;
+        private final ImageButton btnLower;
+        private final ImageButton btnHighUp;
 
-        private CheckBox checkBox;
+        private final CheckBox checkBox;
 
         private Integer id = -1;
 
@@ -77,10 +80,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             this.btnHighUp = itemView.findViewById(R.id.btn_item_higher);
             this.btnLower = itemView.findViewById(R.id.btn_item_lower);
 
-            checkBox.setOnClickListener(this::onClick);
+            checkBox.setOnClickListener(this);
 
-            btnLower.setOnClickListener(this::onClick);
-            btnHighUp.setOnClickListener(this::onClick);
+            btnLower.setOnClickListener(this);
+            btnHighUp.setOnClickListener(this);
 
             lblAmount.addTextChangedListener(this);
 
@@ -99,6 +102,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             return checkBox;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onClick(View view) {
             int currentAmount = Integer.parseInt(lblAmount.getText().toString());
