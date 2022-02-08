@@ -1,6 +1,7 @@
 package com.multimed.listation.activities;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
@@ -16,10 +18,12 @@ import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
+import com.multimed.listation.support.MultiToolbarActivity;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements MultiToolbarActivity {
 
     FloatingActionButton btnCreateItem;
+    ImageButton btnEdit;
 
     RecyclerView itemRecyclerView;
 
@@ -28,6 +32,7 @@ public class ListActivity extends AppCompatActivity {
     SQLiteConnectionHelper conn;
 
     Integer idList;
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -71,5 +76,24 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ListActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void changeToolbar(int toolbar) {
+        switch(toolbar){
+            case 1:
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                getSupportActionBar().setCustomView(R.layout.delete_toolbar);
+                btnEdit = findViewById(R.id.btn_toolbar_edit);
+                break;
+            case 0:
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                break;
+        }
+    }
+
+    @Override
+    public void setEditVisibility(int visibility) {
+        btnEdit.setVisibility(visibility);
     }
 }

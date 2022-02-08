@@ -15,9 +15,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
+import com.multimed.listation.support.MultiToolbarActivity;
+
+import java.util.ArrayList;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
 
@@ -26,6 +30,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     Context context;
 
     SQLiteConnectionHelper conn;
+
+    ArrayList<Integer> selectedItems = new ArrayList<>();
+    boolean selectionMode = false;
 
     public ItemListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
         this.localDataBase = localDataBase;
@@ -57,6 +64,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @Override
     public int getItemCount() {
         return localDataBase.getCount();
+    }
+
+    public void deselectAllItems() {
+        selectedItems.clear();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
@@ -108,24 +119,26 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         @SuppressLint("SetTextI18n")
         @Override
         public void onClick(View view) {
-            int currentAmount = Integer.parseInt(lblAmount.getText().toString());
+                int currentAmount = Integer.parseInt(lblAmount.getText().toString());
 
-            switch (view.getId()) {
-                case (R.id.btn_item_lower):
-                    ItemController.updateItemAmount(conn, id, --currentAmount);
-                    lblAmount.setText(currentAmount + "");
-                    break;
-                case (R.id.btn_item_higher):
-                    ItemController.updateItemAmount(conn, id, ++currentAmount);
-                    lblAmount.setText(currentAmount + "");
-                    break;
-                case (R.id.chkd_item):
-                    System.out.println("Traduzco esto - " + (checkBox.isChecked()? 1 : 0));
+                switch (view.getId()) {
+                    case (R.id.btn_item_lower):
+                        ItemController.updateItemAmount(conn, id, --currentAmount);
+                        lblAmount.setText(currentAmount + "");
+                        break;
+                    case (R.id.btn_item_higher):
+                        ItemController.updateItemAmount(conn, id, ++currentAmount);
+                        lblAmount.setText(currentAmount + "");
+                        break;
+                    case (R.id.chkd_item):
+                        System.out.println("Traduzco esto - " + (checkBox.isChecked() ? 1 : 0));
 
-                    int checked = checkBox.isChecked()? 1 : 0;
-                    ItemController.updateItemCheck(conn, id, checked);
-                    break;
-            }
+                        int checked = checkBox.isChecked() ? 1 : 0;
+                        ItemController.updateItemCheck(conn, id, checked);
+                        break;
+
+                }
+
         }
 
         public void setId(int id) {
@@ -146,7 +159,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         }
 
 
-
         //Not used method needed to be overriden
         @Override
         public void afterTextChanged(Editable editable) {
@@ -160,18 +172,59 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
         @Override
         public boolean onLongClick(View v) {
-            View view = itemView.findViewById(R.id.item_background_layout);
+
             if (!selected) {
-                setSelected(true);
-                view.setBackgroundResource(R.color.selected_green);
+                if (selectedItems.size() == 0) {
+                    selectionMode = true;
+                    if (context instanceof MultiToolbarActivity){
+                        ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
+                    }
+
+                }
+                selectItem(id);
+                changeItemState(true);
+
             } else {
-                setSelected(false);
-                view.setBackgroundResource(R.color.white);
+                deselectItem(id);
+                if (selectedItems.size() == 0) {
+                    selectionMode = false;
+                    if (context instanceof MultiToolbarActivity){
+                        ((MultiToolbarActivity) context).changeToolbar(MainActivity.DEFAULT_TOOLBAR);
+                    }
+                }
+                changeItemState(false);
             }
 
             return true;
         }
 
+        public void selectItem(int id) {
+            View view = itemView.findViewById(R.id.item_background_layout);
+            setSelected(true);
+            selectedItems.add(id);
+            view.setBackgroundResource(R.color.selected_green);
+            if (selectedItems.size() > 1 && context instanceof MultiToolbarActivity){
+                ((MultiToolbarActivity) context).setEditVisibility(View.INVISIBLE);
+            }
 
+        }
+
+        public void deselectItem(int id) {
+            View view = itemView.findViewById(R.id.item_background_layout);
+            setSelected(false);
+            selectedItems.remove((Object) id);
+            view.setBackgroundResource(R.color.white);
+            if (selectedItems.size() == 1 && context instanceof MultiToolbarActivity){
+                ((MultiToolbarActivity) context).setEditVisibility(View.VISIBLE);
+            }
+        }
+
+        public void changeItemState(boolean selected) {
+            int visible = !selected ? View.VISIBLE : View.INVISIBLE;
+            checkBox.setVisibility(visible);
+            btnLower.setVisibility(visible);
+            lblAmount.setVisibility(visible);
+            btnHighUp.setVisibility(visible);
+        }
     }
 }

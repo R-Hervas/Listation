@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,20 +18,23 @@ import com.multimed.listation.activities.AddListActivity;
 import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ListController;
+import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MultiToolbarActivity {
+
+    public static final int DEFAULT_TOOLBAR = 0;
+    public static final int CUSTOM_TOOLBAR = 1;
 
     FloatingActionButton btnCreateList;
+    ImageButton btnEdit;
 
     RecyclerView listRecyclerView;
 
     Cursor listDataSet;
 
     SQLiteConnectionHelper conn;
-
-    ArrayList<Integer> selectedLists = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreateList = findViewById(R.id.btn_list_add);
         btnCreateList.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddListActivity.class)));
 
+
         listRecyclerView = findViewById(R.id.list_recycleview);
         listRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -62,4 +69,26 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
        this.finishAffinity();
     }
+
+    @Override
+    public void changeToolbar(int toolbar){
+        switch(toolbar){
+            case 1:
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                getSupportActionBar().setCustomView(R.layout.delete_toolbar);
+                btnEdit = findViewById(R.id.btn_toolbar_edit);
+                break;
+            case 0:
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                break;
+        }
+
+    }
+
+    @Override
+    public void setEditVisibility(int visibility) {
+        btnEdit.setVisibility(visibility);
+    }
+
+
 }
