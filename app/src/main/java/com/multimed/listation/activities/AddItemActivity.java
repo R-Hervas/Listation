@@ -119,4 +119,5 @@ public class AddItemActivity extends AppCompatActivity {
         bundle.putInt("LIST_ID", listId);
         startActivity(new Intent(AddItemActivity.this, ListActivity.class).putExtras(bundle));
     }
+
 }

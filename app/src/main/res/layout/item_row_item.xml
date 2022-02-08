@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/item_background_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white"
@@ -46,7 +47,8 @@
             android:background="@drawable/shape_round_btn"
             android:src="@drawable/ic_btn_lower"
 
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/lbl_item_amount"
@@ -59,7 +61,7 @@
             android:gravity="center"
 
             android:text="@string/lbl_item_amount_default"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/btn_item_higher"
@@ -74,7 +76,8 @@
             android:background="@drawable/shape_round_btn"
             android:src="@drawable/ic_btn_highup"
 
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:contentDescription="TODO" />
 
 
     </LinearLayout>

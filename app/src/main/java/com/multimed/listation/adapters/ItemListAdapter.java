@@ -59,7 +59,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return localDataBase.getCount();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
 
         private final TextView lblName;
         private final TextView lblAmount;
@@ -70,6 +70,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         private final CheckBox checkBox;
 
         private Integer id = -1;
+        private boolean selected = false;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +87,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             btnHighUp.setOnClickListener(this);
 
             lblAmount.addTextChangedListener(this);
+
+            itemView.setOnLongClickListener(this);
 
 
         }
@@ -129,6 +132,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             this.id = id;
         }
 
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
 
         @Override
         public void onTextChanged(CharSequence value, int i, int i1, int i2) {
@@ -150,6 +156,20 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            View view = itemView.findViewById(R.id.item_background_layout);
+            if (!selected) {
+                setSelected(true);
+                view.setBackgroundResource(R.color.selected_green);
+            } else {
+                setSelected(false);
+                view.setBackgroundResource(R.color.white);
+            }
+
+            return true;
         }
 
 

@@ -98,7 +98,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             context.startActivity(intent);
         }
 
-        @SuppressLint("ResourceAsColor")
         @Override
         public boolean onLongClick(View v) {
             View view = itemView.findViewById(R.id.list_background_layout);
