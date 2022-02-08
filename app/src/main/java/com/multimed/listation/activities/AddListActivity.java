@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
@@ -93,5 +94,11 @@ public class AddListActivity extends AppCompatActivity {
         // make the view visible and start the animation
         rootLayout.setVisibility(View.VISIBLE);
         circularReveal.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        startActivity(new Intent(AddListActivity.this, MainActivity.class));
     }
 }

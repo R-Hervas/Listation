@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="15dp"
-    android:elevation="10dp">
+    android:elevation="10dp"
+    android:clickable="true">
 
     <LinearLayout
+        android:id="@+id/list_background_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -44,12 +46,6 @@
                     android:textAppearance="@style/itemCount"
                     tools:ignore="TextContrastCheck" />
 
-                <!-- elemento pendiente de revision -->
-                <ImageButton
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="10dp"
-                    android:src="@android:drawable/ic_dialog_dialer"/>
 
             </LinearLayout>
 

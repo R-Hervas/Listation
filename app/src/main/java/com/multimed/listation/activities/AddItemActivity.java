@@ -7,6 +7,7 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
@@ -75,6 +76,13 @@ public class AddItemActivity extends AppCompatActivity {
 
         btnAdd.setOnClickListener(this::onClick);
 
+        Intent intent = new Intent(AddItemActivity.this, ListActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("LIST_ID", listId);
+        intent.putExtras(b);
+
+        btnExit.setOnClickListener(view -> startActivity(intent));
+
     }
 
     private void revealActivity() {
@@ -102,5 +110,13 @@ public class AddItemActivity extends AppCompatActivity {
             bundle.putInt("LIST_ID", listId);
             startActivity(new Intent(AddItemActivity.this, ListActivity.class).putExtras(bundle));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Bundle bundle = new Bundle();
+        bundle.putInt("LIST_ID", listId);
+        startActivity(new Intent(AddItemActivity.this, ListActivity.class).putExtras(bundle));
     }
 }

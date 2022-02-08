@@ -16,6 +16,8 @@ import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ListController;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton btnCreateList;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     Cursor listDataSet;
 
     SQLiteConnectionHelper conn;
+
+    ArrayList<Integer> selectedLists = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -54,4 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+       this.finishAffinity();
+    }
 }

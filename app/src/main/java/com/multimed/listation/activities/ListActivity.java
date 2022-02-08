@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
@@ -65,5 +66,10 @@ public class ListActivity extends AppCompatActivity {
 
         itemRecyclerView.setAdapter(itemListAdapter);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ListActivity.this, MainActivity.class));
     }
 }

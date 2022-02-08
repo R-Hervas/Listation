@@ -50,7 +50,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         holder.setId(id);
         holder.getLblName().setText(localDataBase.getString(1));
         holder.getLblNumberItems().setText(ListController.getListItems(conn, id).getCount() + "");
-
     }
 
     @Override
@@ -58,17 +57,19 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return localDataBase.getCount();
     }
 
-    public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         private final TextView lblName, lblNumberItems;
 
         private Integer id = -1;
+        private boolean selected = false;
 
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
             this.lblName = itemView.findViewById(R.id.lbl_list_name);
             this.lblNumberItems = itemView.findViewById(R.id.lbl_item_count);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         public TextView getLblName() {
@@ -81,6 +82,9 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
         public void setId(Integer id){this.id = id;}
 
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
 
         @Override
         public void onClick(View view) {
@@ -92,6 +96,21 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             intent.putExtras(bundle);
 
             context.startActivity(intent);
+        }
+
+        @SuppressLint("ResourceAsColor")
+        @Override
+        public boolean onLongClick(View v) {
+            View view = itemView.findViewById(R.id.list_background_layout);
+            if (!selected) {
+                setSelected(true);
+                view.setBackgroundResource(R.color.selected_green);
+            } else {
+                setSelected(false);
+                view.setBackgroundResource(R.color.white);
+            }
+
+            return true;
         }
     }
 }
