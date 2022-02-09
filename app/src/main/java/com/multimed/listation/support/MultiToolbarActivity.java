@@ -2,7 +2,11 @@ package com.multimed.listation.support;
 
 public interface MultiToolbarActivity {
 
-    public void changeToolbar(int toolbar);
+    void changeToolbar(int toolbar);
 
-    public void setEditVisibility(int visibility);
+    void setEditVisibility(int visibility);
+
+    void setupBtnEdit();
+
+    void setupBtnDelete();
 }

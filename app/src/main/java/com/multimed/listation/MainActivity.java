@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -20,7 +20,7 @@ import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MultiToolbarActivity {
 
@@ -28,13 +28,15 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
     public static final int CUSTOM_TOOLBAR = 1;
 
     FloatingActionButton btnCreateList;
-    ImageButton btnEdit;
+    ImageButton btnEdit, btnDelete;
 
     RecyclerView listRecyclerView;
 
     Cursor listDataSet;
 
     SQLiteConnectionHelper conn;
+
+    ListListAdapter listListAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -53,13 +55,12 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
         btnCreateList = findViewById(R.id.btn_list_add);
         btnCreateList.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddListActivity.class)));
 
-
         listRecyclerView = findViewById(R.id.list_recycleview);
         listRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         listDataSet = ListController.getAllLists(conn);
 
-        ListListAdapter listListAdapter = new ListListAdapter(listDataSet, this, conn);
+        listListAdapter = new ListListAdapter(listDataSet, this, conn);
 
         listRecyclerView.setAdapter(listListAdapter);
 
@@ -67,22 +68,46 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
     @Override
     public void onBackPressed() {
-       this.finishAffinity();
+        this.finishAffinity();
     }
 
     @Override
-    public void changeToolbar(int toolbar){
-        switch(toolbar){
+    public void changeToolbar(int toolbar) {
+        switch (toolbar) {
             case 1:
-                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
                 getSupportActionBar().setCustomView(R.layout.delete_toolbar);
-                btnEdit = findViewById(R.id.btn_toolbar_edit);
+                setupBtnEdit();
+                setupBtnDelete();
                 break;
             case 0:
-                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                 break;
         }
 
+    }
+
+    @Override
+    public void setupBtnDelete() {
+        btnDelete = findViewById(R.id.btn_toolbar_delete);
+        btnDelete.setOnClickListener(view -> {
+            for (Integer id :
+                    listListAdapter.getSelectedPositions()) {
+                listListAdapter.notifyItemRemoved(id);
+            }
+
+            int listsDeleted = ListController.deleteListsById(conn, listListAdapter.getSelectedLists());
+            Toast.makeText(this, "Se han eliminado " + listsDeleted + " listas", Toast.LENGTH_SHORT).show();
+
+            listListAdapter.clearSelection();
+        });
+
+    }
+
+    @Override
+    public void setupBtnEdit() {
+        btnEdit = findViewById(R.id.btn_toolbar_edit);
+        btnEdit.setOnClickListener(view -> ListController.updateListName(conn, listListAdapter.getSelectedLists().get(0), "Pingas"));
     }
 
     @Override

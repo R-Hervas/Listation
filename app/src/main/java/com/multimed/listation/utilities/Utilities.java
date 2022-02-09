@@ -18,7 +18,8 @@ public class Utilities {
             "CREATE TABLE " + TABLE_LIST + " (" + FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FIELD_NAME + " TEXT) ";
     public static final String CREATE_TABLE_ITEM =
             "CREATE TABLE " + TABLE_ITEM + " (" + FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FIELD_NAME + " TEXT, " +
-            FIELD_AMOUNT + " INTEGER, " + FIELD_LIST + " INTEGER, " + FIELD_CHECKED + " INTEGER)";
+            FIELD_AMOUNT + " INTEGER, " + FIELD_LIST + " INTEGER , " + FIELD_CHECKED + " INTEGER, CONSTRAINT " +
+                    " fk_items FOREIGN KEY ( " + FIELD_LIST + " ) REFERENCES " + TABLE_LIST + " ( " + FIELD_ID + ") ON DELETE CASCADE )";
 
 
     //Table drop if exits statements

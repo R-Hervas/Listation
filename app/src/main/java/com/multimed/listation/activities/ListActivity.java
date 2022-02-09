@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
@@ -18,16 +20,19 @@ import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
+import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 public class ListActivity extends AppCompatActivity implements MultiToolbarActivity {
 
     FloatingActionButton btnCreateItem;
-    ImageButton btnEdit;
+    ImageButton btnEdit, btnDelete;
 
     RecyclerView itemRecyclerView;
 
     Cursor itemDataSet;
+
+    ItemListAdapter itemListAdapter;
 
     SQLiteConnectionHelper conn;
 
@@ -67,15 +72,33 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
 
         itemDataSet = ItemController.getItemsByList(idList, conn);
 
-        ItemListAdapter itemListAdapter = new ItemListAdapter(itemDataSet, this, conn);
+        itemListAdapter = new ItemListAdapter(itemDataSet, this, conn);
 
         itemRecyclerView.setAdapter(itemListAdapter);
 
     }
 
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ListActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void setupBtnDelete() {
+        btnDelete = findViewById(R.id.btn_toolbar_delete);
+        btnDelete .setOnClickListener(view -> {
+            int itemsDeleted  = ItemController.deleteItemsById(conn, itemListAdapter.getSelectedItems());
+            Toast.makeText(this, "Se han eliminado " + itemsDeleted + " productos", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void setupBtnEdit() {
+        btnEdit = findViewById(R.id.btn_toolbar_edit);
+        btnEdit.setOnClickListener(view -> {
+            ListController.updateListName(conn, itemListAdapter.getSelectedItems().get(0), "Pingas");
+        });
     }
 
     @Override
@@ -84,7 +107,8 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
             case 1:
                 getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
                 getSupportActionBar().setCustomView(R.layout.delete_toolbar);
-                btnEdit = findViewById(R.id.btn_toolbar_edit);
+                setupBtnEdit();
+                setupBtnDelete();
                 break;
             case 0:
                 getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);

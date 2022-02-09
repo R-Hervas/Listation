@@ -27,6 +27,8 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
     Cursor localDataBase;
 
     ArrayList<Integer> selectedLists = new ArrayList<>();
+    ArrayList<Integer> selectedPositions = new ArrayList<>();
+
     boolean selectionMode = false;
 
     Context context;
@@ -52,11 +54,12 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         localDataBase.moveToFirst();
         localDataBase.move(position);
 
-        int id = position + 1;
+        int id = localDataBase.getInt(0);
 
         holder.setId(id);
         holder.getLblName().setText(localDataBase.getString(1));
         holder.getLblNumberItems().setText(ListController.getListItems(conn, id).getCount() + "");
+        holder.setPosition(position);
     }
 
     @Override
@@ -68,12 +71,26 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         selectedLists.clear();
     }
 
+    public ArrayList<Integer> getSelectedLists() {
+        return selectedLists;
+    }
+
+    public ArrayList<Integer> getSelectedPositions() {
+        return selectedPositions;
+    }
+
+    public void clearSelection(){
+        selectedLists.clear();
+        selectedPositions.clear();
+    }
+
     public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private final TextView lblName, lblNumberItems;
 
         private Integer id = -1;
         private boolean selected = false;
+        private Integer position = -1;
 
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +116,10 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             this.selected = selected;
         }
 
+        public void setPosition(Integer position) {
+            this.position = position;
+        }
+
         @Override
         public void onClick(View view) {
             if (!selectionMode) {
@@ -113,7 +134,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
                 deselectAllLists();
             } else {
                 if (!selected) {
-                    selectList(id);
+                    selectList(id, position);
                 } else {
                     deselectList(id);
                     if (selectedLists.size() == 0) {
@@ -137,7 +158,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
                             ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
                         }
                     }
-                    selectList(id);
+                    selectList(id, position);
                 } else {
                     deselectList(id);
                 }
@@ -146,10 +167,11 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             return true;
         }
 
-        private void selectList(int id) {
+        private void selectList(int id, int position) {
             View view = itemView.findViewById(R.id.list_background_layout);
             setSelected(true);
             selectedLists.add(id);
+            selectedPositions.add(position);
             view.setBackgroundResource(R.color.selected_green);
             if (selectedLists.size() > 1 && context instanceof MultiToolbarActivity){
                 ((MultiToolbarActivity) context).setEditVisibility(View.INVISIBLE);

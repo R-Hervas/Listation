@@ -53,7 +53,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         localDataBase.moveToFirst();
         localDataBase.move(position);
 
-        holder.setId(position + 1);
+        holder.setId(localDataBase.getInt(0));
         holder.getLblName().setText(localDataBase.getString(1));
         holder.getLblAmount().setText(localDataBase.getInt(2) + "");
         holder.getCheckBox().setChecked(localDataBase.getInt(4) == 1);
@@ -68,6 +68,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public void deselectAllItems() {
         selectedItems.clear();
+    }
+
+    public ArrayList<Integer> getSelectedItems() {
+        return selectedItems;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
