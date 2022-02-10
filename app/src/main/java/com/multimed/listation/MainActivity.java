@@ -91,13 +91,15 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
     public void setupBtnDelete() {
         btnDelete = findViewById(R.id.btn_toolbar_delete);
         btnDelete.setOnClickListener(view -> {
-            for (Integer id :
-                    listListAdapter.getSelectedPositions()) {
-                listListAdapter.notifyItemRemoved(id);
-            }
+
 
             int listsDeleted = ListController.deleteListsById(conn, listListAdapter.getSelectedLists());
             Toast.makeText(this, "Se han eliminado " + listsDeleted + " listas", Toast.LENGTH_SHORT).show();
+
+            listDataSet = null;
+            listDataSet = ListController.getAllLists(conn);
+            listListAdapter = new ListListAdapter(listDataSet, this, conn);
+            listRecyclerView.setAdapter(listListAdapter);
 
             listListAdapter.clearSelection();
         });

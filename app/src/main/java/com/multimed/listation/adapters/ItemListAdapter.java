@@ -32,6 +32,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     SQLiteConnectionHelper conn;
 
     ArrayList<Integer> selectedItems = new ArrayList<>();
+    ArrayList<Integer> selectedPositions = new ArrayList<>();
     boolean selectionMode = false;
 
     public ItemListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
@@ -57,7 +58,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         holder.getLblName().setText(localDataBase.getString(1));
         holder.getLblAmount().setText(localDataBase.getInt(2) + "");
         holder.getCheckBox().setChecked(localDataBase.getInt(4) == 1);
-
+        holder.setPosition(position);
 
     }
 
@@ -66,12 +67,17 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         return localDataBase.getCount();
     }
 
-    public void deselectAllItems() {
-        selectedItems.clear();
-    }
-
     public ArrayList<Integer> getSelectedItems() {
         return selectedItems;
+    }
+
+    public ArrayList<Integer> getSelectedPositions() {
+        return selectedPositions;
+    }
+
+    public void clearSelection() {
+        selectedItems.clear();
+        selectedPositions.clear();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
@@ -86,6 +92,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
         private Integer id = -1;
         private boolean selected = false;
+        private int position = -1;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,6 +127,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             return checkBox;
         }
 
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+
         @SuppressLint("SetTextI18n")
         @Override
         public void onClick(View view) {
@@ -152,6 +164,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         public void setSelected(boolean selected) {
             this.selected = selected;
         }
+
+
 
         @Override
         public void onTextChanged(CharSequence value, int i, int i1, int i2) {
@@ -206,6 +220,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View view = itemView.findViewById(R.id.item_background_layout);
             setSelected(true);
             selectedItems.add(id);
+            selectedPositions.add(position);
             view.setBackgroundResource(R.color.selected_green);
             if (selectedItems.size() > 1 && context instanceof MultiToolbarActivity){
                 ((MultiToolbarActivity) context).setEditVisibility(View.INVISIBLE);
@@ -217,6 +232,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             View view = itemView.findViewById(R.id.item_background_layout);
             setSelected(false);
             selectedItems.remove((Object) id);
+            selectedPositions.remove((Object) position);
             view.setBackgroundResource(R.color.white);
             if (selectedItems.size() == 1 && context instanceof MultiToolbarActivity){
                 ((MultiToolbarActivity) context).setEditVisibility(View.VISIBLE);

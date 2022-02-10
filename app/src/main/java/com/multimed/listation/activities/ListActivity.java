@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
+import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
 import com.multimed.listation.controllers.ListController;
@@ -90,6 +91,15 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         btnDelete .setOnClickListener(view -> {
             int itemsDeleted  = ItemController.deleteItemsById(conn, itemListAdapter.getSelectedItems());
             Toast.makeText(this, "Se han eliminado " + itemsDeleted + " productos", Toast.LENGTH_SHORT).show();
+
+            itemDataSet = null;
+            itemDataSet = ListController.getAllLists(conn);
+            itemListAdapter = new ItemListAdapter(itemDataSet, this, conn);
+            itemRecyclerView.setAdapter(itemListAdapter);
+
+
+
+            itemListAdapter.clearSelection();
         });
     }
 
