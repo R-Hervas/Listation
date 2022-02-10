@@ -93,7 +93,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
             Toast.makeText(this, "Se han eliminado " + itemsDeleted + " productos", Toast.LENGTH_SHORT).show();
 
             itemDataSet = null;
-            itemDataSet = ListController.getAllLists(conn);
+            itemDataSet = ItemController.getItemsByList(idList, conn);
             itemListAdapter = new ItemListAdapter(itemDataSet, this, conn);
             itemRecyclerView.setAdapter(itemListAdapter);
 
