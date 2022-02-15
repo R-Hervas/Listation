@@ -80,6 +80,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         selectedPositions.clear();
     }
 
+    public void setSelectionMode(boolean b) {
+        selectionMode = b;
+    }
+
+    public void setEditMode(boolean b) {
+        setEditMode(b);
+    }
+
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
 
         private final TextView lblName;

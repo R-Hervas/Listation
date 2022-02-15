@@ -11,4 +11,5 @@
     <string name="input_new_item_hint">Nuevo Producto</string>
     <string name="input_new_list_desc">Nueva lista</string>
     <string name="input_list_name_str">Nuevo Nombre</string>
+    <string name="input_item_name_str">New Name</string>
 </resources>

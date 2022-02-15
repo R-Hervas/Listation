@@ -35,6 +35,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
     //Modes of the adapter
     private boolean selectionMode = false;
+    private boolean editMode = false;
 
     //Context and connection of use
     Context context;
@@ -42,9 +43,10 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
     /**
      * Constructor
+     *
      * @param localDataBase - Cursor: Data to be loaded in the adapter
-     * @param context - Context: Context of use for the adapter
-     * @param conn - SQLiteConnectionHelper to connect the db as call ListController
+     * @param context       - Context: Context of use for the adapter
+     * @param conn          - SQLiteConnectionHelper to connect the db as call ListController
      */
     public ListListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
         this.localDataBase = localDataBase;
@@ -97,7 +99,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
     /**
      * Cleans all selections in recycler view
      */
-    public void clearSelection(){
+    public void clearSelection() {
         selectedLists.clear();
         selectedPositions.clear();
     }
@@ -107,11 +109,14 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         this.selectionMode = selectionMode;
     }
 
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
+
     public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private final TextView lblName, lblNumberItems;
         private final EditText inputName;
-        private final ImageButton btnConfirm;
 
         private Integer id = -1;
         private Integer position = -1;
@@ -126,23 +131,20 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             this.lblName = itemView.findViewById(R.id.lbl_list_name);
             this.lblNumberItems = itemView.findViewById(R.id.lbl_item_count);
             this.inputName = itemView.findViewById(R.id.input_list_name);
-            this.btnConfirm = itemView.findViewById(R.id.btn_list_confirm_edit);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-
-            btnConfirm.setOnClickListener(view -> {
-                updateName();
-            });
         }
 
-        private void updateName() {
+        public void updateName() {
             String newName = inputName.getText().toString();
             lblName.setText(newName);
 
             ListController.updateListName(conn, id, newName);
 
             clearSelection();
+            View view = itemView.findViewById(R.id.list_background_layout);
+            view.setBackgroundResource(R.color.white);
         }
 
         // GETTERS n SETTERS -------------------------------------------------------------------
@@ -175,41 +177,42 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
         /**
          * Activates and deactivates the item view from edit mode to default
+         *
          * @param editModeItemLayout - boolean with visibility of edit layout
          */
-        public void setEditModeItemLayout(boolean editModeItemLayout){
+        public void setEditModeItemLayout(boolean editModeItemLayout) {
             if (editModeItemLayout) {
                 lblName.setVisibility(View.INVISIBLE);
                 lblNumberItems.setVisibility(View.INVISIBLE);
                 inputName.setVisibility(View.VISIBLE);
-                btnConfirm.setVisibility(View.VISIBLE);
             } else {
                 lblName.setVisibility(View.VISIBLE);
                 lblNumberItems.setVisibility(View.VISIBLE);
                 inputName.setVisibility(View.INVISIBLE);
-                btnConfirm.setVisibility(View.INVISIBLE);
+                itemView.setBackgroundResource(R.color.white);
             }
         }
 
         @Override
         public void onClick(View view) {
-            if (!selectionMode) {
+            if (!editMode) {
+                if (!selectionMode) {
 
-                Intent intent = new Intent(context, ListActivity.class);
+                    Intent intent = new Intent(context, ListActivity.class);
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("LIST_ID", id);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("LIST_ID", id);
 
-                intent.putExtras(bundle);
+                    intent.putExtras(bundle);
 
-                clearSelection();
-                context.startActivity(intent);
+                    clearSelection();
+                    context.startActivity(intent);
 
-            } else if (!selected) {
+                } else if (!selected) {
 
                     selectList(id, position);
 
-            } else {
+                } else if (selected) {
 
                     deselectList(id, position);
 
@@ -221,6 +224,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
                     }
                 }
             }
+        }
 
 
         @Override
@@ -243,6 +247,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
         /**
          * Selects an item from list (Includes add it from selection lists, change background, update Edit)
+         *
          * @param id
          * @param position
          */
@@ -258,13 +263,14 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             view.setBackgroundResource(R.color.selected_green);
 
             //Changes editbtn state
-            if (selectedLists.size() > 1 && context instanceof MultiToolbarActivity){
+            if (selectedLists.size() > 1 && context instanceof MultiToolbarActivity) {
                 ((MultiToolbarActivity) context).setBtnEditVisibility(View.INVISIBLE);
             }
         }
 
         /**
          * Deselects an item from list (Includes remove it from selection lists, change background, update Edit)
+         *
          * @param id
          * @param position
          */
@@ -280,7 +286,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             view.setBackgroundResource(R.color.white);
 
             //Change edit btn state
-            if (selectedLists.size() == 1 && context instanceof MultiToolbarActivity){
+            if (selectedLists.size() == 1 && context instanceof MultiToolbarActivity) {
                 ((MultiToolbarActivity) context).setBtnEditVisibility(View.VISIBLE);
             }
         }

@@ -21,6 +21,8 @@ public interface MultiToolbarActivity {
 
     void setupBtnEdit();
 
+    void setupBtnConfirm();
+
     void setupBtnDelete();
 
     /**

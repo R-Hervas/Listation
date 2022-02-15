@@ -1,10 +1,12 @@
 package com.multimed.listation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
     //User Interface Element
     FloatingActionButton btnCreateList;
-    ImageButton btnEdit, btnDelete;
+    ImageButton btnEdit, btnDelete, btnConfirm;
 
     RecyclerView listRecyclerView;
     ListListAdapter listListAdapter;
@@ -100,12 +102,30 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
                 getSupportActionBar().setCustomView(R.layout.delete_toolbar);
                 setupBtnEdit();
                 setupBtnDelete();
+                setupBtnConfirm();
                 break;
             case 0:
                 Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                 break;
         }
 
+    }
+
+    @Override
+    public void setupBtnConfirm() {
+        btnConfirm = findViewById(R.id.btn_toolbar_update);
+        btnConfirm.setOnClickListener(view -> {
+            ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
+            holder.updateName();
+            Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
+            holder.setEditModeItemLayout(false);
+            listListAdapter.setSelectionMode(false);
+            listListAdapter.setEditMode(false);
+            listListAdapter.clearSelection();
+            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        });
     }
 
     /**
@@ -126,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
             listRecyclerView.setAdapter(listListAdapter);
 
             listListAdapter.clearSelection();
+            listListAdapter.setSelectionMode(false);
+            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
         });
 
     }
@@ -144,17 +166,18 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
         btnEdit.setOnClickListener(view -> {
             ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
-            if (!editMode) {
-                holder.setEditModeItemLayout(true);
-                editMode = true;
-                listListAdapter.setSelectionMode(false); //Revisar esta linea
-            } else {
-                holder.setEditModeItemLayout(false);
-                editMode = false;
-                listListAdapter.clearSelection(); //Limpiar la seleccion
-            }
+            holder.setEditModeItemLayout(!editMode);
+            btnConfirm.setVisibility(View.VISIBLE);
+            btnEdit.setVisibility(View.INVISIBLE);
+            btnDelete.setVisibility(View.INVISIBLE);
+            setEditMode(!editMode);
         });
 
+    }
+
+    private void setEditMode(boolean b) {
+        editMode = b;
+        listListAdapter.setEditMode(b);
     }
 
 }

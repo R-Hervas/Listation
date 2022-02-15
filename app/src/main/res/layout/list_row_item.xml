@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="15dp"
     android:clickable="true"
-    android:elevation="10dp"
     android:focusable="true">
 
     <LinearLayout
@@ -69,17 +68,6 @@
                     android:text="@string/default_item_count"
                     android:textAppearance="@style/itemCount"
                     tools:ignore="TextContrastCheck" />
-
-                <ImageButton
-                    android:id="@+id/btn_list_confirm_edit"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_btn_check"
-
-                    android:background="@drawable/shape_round_btn_transparent"
-                    app:tint="@color/everyday_green"
-                    android:visibility="invisible"
-                    android:elevation="1dp"/>
 
             </RelativeLayout>
 

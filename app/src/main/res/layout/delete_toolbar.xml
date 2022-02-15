@@ -47,7 +47,25 @@
             android:background="@drawable/shape_round_btn_transparent"
             android:src="@drawable/ic_btn_delete"
 
-            app:tint="@color/white" />
+            app:tint="@color/white"/>
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_update"
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_gravity="center"
+            android:layout_toEndOf="@id/btn_toolbar_edit"
+
+            android:layout_marginStart="10dp"
+            android:paddingHorizontal="3dp"
+
+            android:background="@drawable/shape_round_btn_transparent"
+            android:src="@drawable/ic_btn_check"
+
+            app:tint="@color/white"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

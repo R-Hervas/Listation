@@ -1,9 +1,12 @@
 package com.multimed.listation.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
+import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
 import com.multimed.listation.controllers.ListController;
@@ -27,7 +31,7 @@ import java.util.Objects;
 public class ListActivity extends AppCompatActivity implements MultiToolbarActivity {
 
     FloatingActionButton btnCreateItem;
-    ImageButton btnEdit, btnDelete;
+    ImageButton btnEdit, btnDelete, btnConfirm;
 
     RecyclerView itemRecyclerView;
 
@@ -38,7 +42,6 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     SQLiteConnectionHelper conn;
 
     Integer idList;
-
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -107,6 +110,23 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     public void setupBtnEdit() {
         btnEdit = findViewById(R.id.btn_toolbar_edit);
         btnEdit.setOnClickListener(view -> ListController.updateListName(conn, itemListAdapter.getSelectedItems().get(0), "Pingas"));
+    }
+
+    @Override
+    public void setupBtnConfirm() {
+        btnConfirm = findViewById(R.id.btn_toolbar_update);
+        btnConfirm.setOnClickListener(view -> {
+            ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
+            holder.updateName();
+            Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
+            holder.setEditModeItemLayout(false);
+            itemListAdapter.setSelectionMode(false);
+            itemListAdapter.setEditMode(false);
+            itemListAdapter.clearSelection();
+            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        });
     }
 
     @Override
