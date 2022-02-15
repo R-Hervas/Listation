@@ -43,6 +43,9 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
 
     Integer idList;
 
+    //MODES
+    boolean editMode;
+
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
             itemListAdapter = new ItemListAdapter(itemDataSet, this, conn);
             itemRecyclerView.setAdapter(itemListAdapter);
 
-
+            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
 
             itemListAdapter.clearSelection();
         });
@@ -109,14 +112,27 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     @Override
     public void setupBtnEdit() {
         btnEdit = findViewById(R.id.btn_toolbar_edit);
-        btnEdit.setOnClickListener(view -> ListController.updateListName(conn, itemListAdapter.getSelectedItems().get(0), "Pingas"));
+
+        btnEdit.setOnClickListener(view -> {
+            ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
+            holder.setEditModeItemLayout(!editMode);
+            btnConfirm.setVisibility(View.VISIBLE);
+            btnEdit.setVisibility(View.INVISIBLE);
+            btnDelete.setVisibility(View.INVISIBLE);
+            setEditMode(!editMode);
+        });
+    }
+
+    private void setEditMode(boolean b) {
+        editMode = b;
+        itemListAdapter.setEditMode(b);
     }
 
     @Override
     public void setupBtnConfirm() {
         btnConfirm = findViewById(R.id.btn_toolbar_update);
         btnConfirm.setOnClickListener(view -> {
-            ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
+            ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
             holder.updateName();
             Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
             holder.setEditModeItemLayout(false);
@@ -137,6 +153,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
                 getSupportActionBar().setCustomView(R.layout.delete_toolbar);
                 setupBtnEdit();
                 setupBtnDelete();
+                setupBtnConfirm();
                 break;
             case 0:
                 Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
+import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     ArrayList<Integer> selectedItems = new ArrayList<>();
     ArrayList<Integer> selectedPositions = new ArrayList<>();
     boolean selectionMode = false;
+    boolean editMode;
 
     public ItemListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
         this.localDataBase = localDataBase;
@@ -85,7 +88,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     }
 
     public void setEditMode(boolean b) {
-        setEditMode(b);
+        editMode = b;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher, View.OnLongClickListener {
@@ -95,6 +98,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
         private final ImageButton btnLower;
         private final ImageButton btnHighUp;
+
+        private final EditText inputName;
 
         private final CheckBox checkBox;
 
@@ -110,6 +115,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             this.lblAmount = itemView.findViewById(R.id.lbl_item_amount);
             this.btnHighUp = itemView.findViewById(R.id.btn_item_higher);
             this.btnLower = itemView.findViewById(R.id.btn_item_lower);
+            this.inputName = itemView.findViewById(R.id.input_item_name);
 
             checkBox.setOnClickListener(this);
 
@@ -198,23 +204,24 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
         @Override
         public boolean onLongClick(View v) {
+            if (!editMode) {
+                if (!selected) {
+                    if (selectedItems.size() == 0) {
+                        selectionMode = true;
+                        if (context instanceof MultiToolbarActivity) {
+                            ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
+                        }
 
-            if (!selected) {
-                if (selectedItems.size() == 0) {
-                    selectionMode = true;
-                    if (context instanceof MultiToolbarActivity){
-                        ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
                     }
+                    selectItem(id);
 
-                }
-                selectItem(id);
-
-            } else {
-                deselectItem(id);
-                if (selectedItems.size() == 0) {
-                    selectionMode = false;
-                    if (context instanceof MultiToolbarActivity){
-                        ((MultiToolbarActivity) context).changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+                } else {
+                    deselectItem(id);
+                    if (selectedItems.size() == 0) {
+                        selectionMode = false;
+                        if (context instanceof MultiToolbarActivity) {
+                            ((MultiToolbarActivity) context).changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+                        }
                     }
                 }
             }
@@ -256,6 +263,33 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             if (Integer.parseInt(lblAmount.getText().toString()) > 1){btnLower.setVisibility(visible);}
             lblAmount.setVisibility(visible);
             btnHighUp.setVisibility(visible);
+        }
+
+        public void setEditModeItemLayout(boolean editModeItemLayout) {
+            if (editModeItemLayout){
+                lblName.setVisibility(View.INVISIBLE);
+                inputName.setVisibility(View.VISIBLE);
+            } else {
+                lblName.setVisibility(View.VISIBLE);
+                inputName.setVisibility(View.INVISIBLE);
+                btnLower.setVisibility(View.VISIBLE);
+                btnHighUp.setVisibility(View.VISIBLE);
+                checkBox.setVisibility(View.VISIBLE);
+                lblAmount.setVisibility(View.VISIBLE);
+                itemView.setBackgroundResource(R.color.white);
+
+            }
+        }
+
+        public void updateName() {
+            String newName = inputName.getText().toString();
+            lblName.setText(newName);
+
+            ItemController.updateItemName(conn, id, newName);
+
+            clearSelection();
+            View view = itemView.findViewById(R.id.item_background_layout);
+            view.setBackgroundResource(R.color.white);
         }
     }
 }
