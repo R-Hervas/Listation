@@ -1,28 +1,28 @@
 package com.multimed.listation.activities;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
-import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
 import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
+
+import java.util.Objects;
 
 public class ListActivity extends AppCompatActivity implements MultiToolbarActivity {
 
@@ -106,28 +106,26 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     @Override
     public void setupBtnEdit() {
         btnEdit = findViewById(R.id.btn_toolbar_edit);
-        btnEdit.setOnClickListener(view -> {
-            ListController.updateListName(conn, itemListAdapter.getSelectedItems().get(0), "Pingas");
-        });
+        btnEdit.setOnClickListener(view -> ListController.updateListName(conn, itemListAdapter.getSelectedItems().get(0), "Pingas"));
     }
 
     @Override
     public void changeToolbar(int toolbar) {
         switch(toolbar){
             case 1:
-                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
                 getSupportActionBar().setCustomView(R.layout.delete_toolbar);
                 setupBtnEdit();
                 setupBtnDelete();
                 break;
             case 0:
-                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+                Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
                 break;
         }
     }
 
     @Override
-    public void setEditVisibility(int visibility) {
+    public void setBtnEditVisibility(int visibility) {
         btnEdit.setVisibility(visibility);
     }
 }

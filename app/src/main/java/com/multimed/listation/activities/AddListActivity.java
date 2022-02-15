@@ -74,11 +74,11 @@ public class AddListActivity extends AppCompatActivity {
                 inputNewListName.setHint("Nombre vacio");
             } else {
                 ListController.createNewList(conn, inputNewListName.getText().toString());
-                startActivity(new Intent(AddListActivity.this, MainActivity.class));
+                exitActivity();
             }
         });
 
-        btnExit.setOnClickListener(view -> startActivity(new Intent(AddListActivity.this, MainActivity.class)));
+        btnExit.setOnClickListener(view -> exitActivity());
     }
 
     private void revealActivity() {
@@ -96,9 +96,13 @@ public class AddListActivity extends AppCompatActivity {
         circularReveal.start();
     }
 
+    private void exitActivity() {
+        startActivity(new Intent(AddListActivity.this, MainActivity.class));
+        inputNewListName.setText("");
+    }
+
     @Override
     public void onBackPressed() {
-        Log.d("CDA", "onBackPressed Called");
         startActivity(new Intent(AddListActivity.this, MainActivity.class));
     }
 }

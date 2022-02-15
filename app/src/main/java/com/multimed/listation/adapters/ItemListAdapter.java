@@ -200,17 +200,15 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
                 }
                 selectItem(id);
-                changeItemState(true);
 
             } else {
                 deselectItem(id);
                 if (selectedItems.size() == 0) {
                     selectionMode = false;
                     if (context instanceof MultiToolbarActivity){
-                        ((MultiToolbarActivity) context).changeToolbar(MainActivity.DEFAULT_TOOLBAR);
+                        ((MultiToolbarActivity) context).changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
                     }
                 }
-                changeItemState(false);
             }
 
             return true;
@@ -221,9 +219,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             setSelected(true);
             selectedItems.add(id);
             selectedPositions.add(position);
-            view.setBackgroundResource(R.color.selected_green);
+            setSelectModeItemLayout(true, view);
             if (selectedItems.size() > 1 && context instanceof MultiToolbarActivity){
-                ((MultiToolbarActivity) context).setEditVisibility(View.INVISIBLE);
+                ((MultiToolbarActivity) context).setBtnEditVisibility(View.INVISIBLE);
             }
 
         }
@@ -233,16 +231,21 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             setSelected(false);
             selectedItems.remove((Object) id);
             selectedPositions.remove((Object) position);
-            view.setBackgroundResource(R.color.white);
+            setSelectModeItemLayout(false, view);
             if (selectedItems.size() == 1 && context instanceof MultiToolbarActivity){
-                ((MultiToolbarActivity) context).setEditVisibility(View.VISIBLE);
+                ((MultiToolbarActivity) context).setBtnEditVisibility(View.VISIBLE);
             }
         }
 
-        public void changeItemState(boolean selected) {
+        /**
+         * Changes elements in the item view between editMode and DefaultMode
+         * @param selected - {true}
+         */
+        public void setSelectModeItemLayout(boolean selected, View view) {
             int visible = !selected ? View.VISIBLE : View.INVISIBLE;
+            view.setBackgroundResource(selected? R.color.selected_green : R.color.white);
             checkBox.setVisibility(visible);
-            btnLower.setVisibility(visible);
+            if (Integer.parseInt(lblAmount.getText().toString()) > 1){btnLower.setVisibility(visible);}
             lblAmount.setVisibility(visible);
             btnHighUp.setVisibility(visible);
         }

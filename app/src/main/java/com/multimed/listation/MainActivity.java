@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,20 +25,27 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MultiToolbarActivity {
 
-    public static final int DEFAULT_TOOLBAR = 0;
-    public static final int CUSTOM_TOOLBAR = 1;
-
+    //User Interface Element
     FloatingActionButton btnCreateList;
     ImageButton btnEdit, btnDelete;
 
     RecyclerView listRecyclerView;
-
-    Cursor listDataSet;
-
-    SQLiteConnectionHelper conn;
-
     ListListAdapter listListAdapter;
 
+    //Dataset
+    Cursor listDataSet;
+
+    //Connection Helper
+    SQLiteConnectionHelper conn;
+
+    //MODES
+    boolean editMode = false;
+
+    /**
+     * On Create
+     *
+     * @param savedInstanceState
+     */
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
         setup();
     }
 
+    /**
+     * Setup all the elements in UI, stablish connection with the db and load all data in the recyclerview
+     */
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void setup() {
 
@@ -66,11 +77,21 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
     }
 
+    /**
+     * On Back Pressed terminates the whole activity
+     *
+     * @implNote MultiToolbarActivity
+     */
     @Override
     public void onBackPressed() {
         this.finishAffinity();
     }
 
+    /**
+     * Change the toolbar
+     *
+     * @param toolbar - DEFAULT_TOOLBAR: 0, CUSTOM_TOOLBAR: 1
+     */
     @Override
     public void changeToolbar(int toolbar) {
         switch (toolbar) {
@@ -87,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
     }
 
+    /**
+     * Prepare btnDelete for deleting one or more lists from the recylcerView and the db
+     */
     @Override
     public void setupBtnDelete() {
         btnDelete = findViewById(R.id.btn_toolbar_delete);
@@ -107,15 +131,30 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
     }
 
     @Override
-    public void setupBtnEdit() {
-        btnEdit = findViewById(R.id.btn_toolbar_edit);
-        btnEdit.setOnClickListener(view -> ListController.updateListName(conn, listListAdapter.getSelectedLists().get(0), "Pingas"));
-    }
-
-    @Override
-    public void setEditVisibility(int visibility) {
+    public void setBtnEditVisibility(int visibility) {
         btnEdit.setVisibility(visibility);
     }
 
+    /**
+     * Prepare the btnEdit for activating the editing mode
+     */
+    @Override
+    public void setupBtnEdit() {
+        btnEdit = findViewById(R.id.btn_toolbar_edit);
+
+        btnEdit.setOnClickListener(view -> {
+            ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
+            if (!editMode) {
+                holder.setEditModeItemLayout(true);
+                editMode = true;
+                listListAdapter.setSelectionMode(false); //Revisar esta linea
+            } else {
+                holder.setEditModeItemLayout(false);
+                editMode = false;
+                listListAdapter.clearSelection(); //Limpiar la seleccion
+            }
+        });
+
+    }
 
 }

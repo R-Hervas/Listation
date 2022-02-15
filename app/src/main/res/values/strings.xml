@@ -10,4 +10,5 @@
     <string name="cancel_create_desc">Boton para salir de la pantalla</string>
     <string name="input_new_item_hint">Nuevo Producto</string>
     <string name="input_new_list_desc">Nueva lista</string>
+    <string name="input_list_name_str">Nuevo Nombre</string>
 </resources>

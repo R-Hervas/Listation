@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,23 +26,34 @@ import java.util.ArrayList;
 
 public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListViewHolder> {
 
+    //DataBase in the adapter
     Cursor localDataBase;
 
+    //Selection lists
     ArrayList<Integer> selectedLists = new ArrayList<>();
     ArrayList<Integer> selectedPositions = new ArrayList<>();
 
-    boolean selectionMode = false;
+    //Modes of the adapter
+    private boolean selectionMode = false;
 
+    //Context and connection of use
     Context context;
-
     SQLiteConnectionHelper conn;
 
+    /**
+     * Constructor
+     * @param localDataBase - Cursor: Data to be loaded in the adapter
+     * @param context - Context: Context of use for the adapter
+     * @param conn - SQLiteConnectionHelper to connect the db as call ListController
+     */
     public ListListAdapter(Cursor localDataBase, Context context, SQLiteConnectionHelper conn) {
         this.localDataBase = localDataBase;
         this.context = context;
         this.conn = conn;
     }
 
+
+    // OVERRIDE methods from RecyclerView ---------------------------------------------------------
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -48,7 +61,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return new ListViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
         localDataBase.moveToFirst();
@@ -58,6 +70,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
         holder.setId(id);
         holder.getLblName().setText(localDataBase.getString(1));
+        holder.getInputName().setText(localDataBase.getString(1));
         holder.getLblNumberItems().setText(ListController.getListItems(conn, id).getCount() + "");
         holder.setPosition(position);
     }
@@ -67,9 +80,9 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return localDataBase.getCount();
     }
 
-    public void deselectAllLists() {
-        selectedLists.clear();
-    }
+    //OVERRIDE methods from RecyclerView ----------------------------------------------------------
+
+    //GETTERS n SETTERS --------------------------------------------------------------------------
 
     public ArrayList<Integer> getSelectedLists() {
         return selectedLists;
@@ -79,26 +92,60 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return selectedPositions;
     }
 
+    //GETTERS n SETTERS --------------------------------------------------------------------------
+
+    /**
+     * Cleans all selections in recycler view
+     */
     public void clearSelection(){
         selectedLists.clear();
         selectedPositions.clear();
     }
 
+
+    public void setSelectionMode(boolean selectionMode) {
+        this.selectionMode = selectionMode;
+    }
+
     public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private final TextView lblName, lblNumberItems;
+        private final EditText inputName;
+        private final ImageButton btnConfirm;
 
         private Integer id = -1;
-        private boolean selected = false;
         private Integer position = -1;
 
+        private boolean selected = false;
+
+
         public ListViewHolder(@NonNull View itemView) {
+
             super(itemView);
+
             this.lblName = itemView.findViewById(R.id.lbl_list_name);
             this.lblNumberItems = itemView.findViewById(R.id.lbl_item_count);
+            this.inputName = itemView.findViewById(R.id.input_list_name);
+            this.btnConfirm = itemView.findViewById(R.id.btn_list_confirm_edit);
+
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+
+            btnConfirm.setOnClickListener(view -> {
+                updateName();
+            });
         }
+
+        private void updateName() {
+            String newName = inputName.getText().toString();
+            lblName.setText(newName);
+
+            ListController.updateListName(conn, id, newName);
+
+            clearSelection();
+        }
+
+        // GETTERS n SETTERS -------------------------------------------------------------------
 
         public TextView getLblName() {
             return lblName;
@@ -106,6 +153,10 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
         public TextView getLblNumberItems() {
             return lblNumberItems;
+        }
+
+        public EditText getInputName() {
+            return inputName;
         }
 
         public void setId(Integer id) {
@@ -120,9 +171,30 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             this.position = position;
         }
 
+        // GETTERS n SETTERS -------------------------------------------------------------------
+
+        /**
+         * Activates and deactivates the item view from edit mode to default
+         * @param editModeItemLayout - boolean with visibility of edit layout
+         */
+        public void setEditModeItemLayout(boolean editModeItemLayout){
+            if (editModeItemLayout) {
+                lblName.setVisibility(View.INVISIBLE);
+                lblNumberItems.setVisibility(View.INVISIBLE);
+                inputName.setVisibility(View.VISIBLE);
+                btnConfirm.setVisibility(View.VISIBLE);
+            } else {
+                lblName.setVisibility(View.VISIBLE);
+                lblNumberItems.setVisibility(View.VISIBLE);
+                inputName.setVisibility(View.INVISIBLE);
+                btnConfirm.setVisibility(View.INVISIBLE);
+            }
+        }
+
         @Override
         public void onClick(View view) {
             if (!selectionMode) {
+
                 Intent intent = new Intent(context, ListActivity.class);
 
                 Bundle bundle = new Bundle();
@@ -130,61 +202,86 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
                 intent.putExtras(bundle);
 
+                clearSelection();
                 context.startActivity(intent);
-                deselectAllLists();
-            } else {
-                if (!selected) {
+
+            } else if (!selected) {
+
                     selectList(id, position);
-                } else {
-                    deselectList(id);
-                    if (selectedLists.size() == 0) {
-                        selectionMode = false;
-                        if (context instanceof MultiToolbarActivity){
-                            ((MultiToolbarActivity) context).changeToolbar(MainActivity.DEFAULT_TOOLBAR);
-                        }
+
+            } else {
+
+                    deselectList(id, position);
+
+                    if (selectedLists.size() == 0 && context instanceof MultiToolbarActivity) {
+
+                        setSelectionMode(false);
+                        ((MultiToolbarActivity) context).changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+
                     }
                 }
             }
-        }
+
 
         @Override
         public boolean onLongClick(View v) {
 
             if (!selectionMode) {
                 if (!selected) {
-                    if (selectedLists.size() == 0) {
-                        selectionMode = true;
-                        if (context instanceof MultiToolbarActivity){
-                            ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
-                        }
+                    if (selectedLists.size() == 0 && context instanceof MultiToolbarActivity) {
+                        setSelectionMode(true);
+                        ((MultiToolbarActivity) context).changeToolbar(MainActivity.CUSTOM_TOOLBAR);
                     }
                     selectList(id, position);
                 } else {
-                    deselectList(id);
+                    deselectList(id, position);
                 }
             }
 
             return true;
         }
 
-        private void selectList(int id, int position) {
+        /**
+         * Selects an item from list (Includes add it from selection lists, change background, update Edit)
+         * @param id
+         * @param position
+         */
+        public void selectList(int id, int position) {
             View view = itemView.findViewById(R.id.list_background_layout);
+
+            //Add item to the selection lists
             setSelected(true);
             selectedLists.add(id);
             selectedPositions.add(position);
+
+            //Changes background
             view.setBackgroundResource(R.color.selected_green);
+
+            //Changes editbtn state
             if (selectedLists.size() > 1 && context instanceof MultiToolbarActivity){
-                ((MultiToolbarActivity) context).setEditVisibility(View.INVISIBLE);
+                ((MultiToolbarActivity) context).setBtnEditVisibility(View.INVISIBLE);
             }
         }
 
-        private void deselectList(int id) {
+        /**
+         * Deselects an item from list (Includes remove it from selection lists, change background, update Edit)
+         * @param id
+         * @param position
+         */
+        public void deselectList(int id, int position) {
             View view = itemView.findViewById(R.id.list_background_layout);
+
+            // Removes the item from the selection lists
             setSelected(false);
             selectedLists.remove((Object) id);
+            selectedPositions.remove((Object) position);
+
+            //Changes background color
             view.setBackgroundResource(R.color.white);
+
+            //Change edit btn state
             if (selectedLists.size() == 1 && context instanceof MultiToolbarActivity){
-                ((MultiToolbarActivity) context).setEditVisibility(View.VISIBLE);
+                ((MultiToolbarActivity) context).setBtnEditVisibility(View.VISIBLE);
             }
         }
     }
