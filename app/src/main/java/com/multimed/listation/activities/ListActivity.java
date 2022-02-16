@@ -20,10 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
-import com.multimed.listation.adapters.ListListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
-import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.Objects;
@@ -115,11 +113,15 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
 
         btnEdit.setOnClickListener(view -> {
             ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
-            holder.setEditModeItemLayout(!editMode);
-            btnConfirm.setVisibility(View.VISIBLE);
-            btnEdit.setVisibility(View.INVISIBLE);
-            btnDelete.setVisibility(View.INVISIBLE);
-            setEditMode(!editMode);
+            if (holder != null) {
+                holder.setEditModeItemLayout(true);
+                btnConfirm.setVisibility(View.VISIBLE);
+                btnEdit.setVisibility(View.INVISIBLE);
+                btnDelete.setVisibility(View.INVISIBLE);
+                setEditMode(true);
+            } else {
+                Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -133,13 +135,15 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         btnConfirm = findViewById(R.id.btn_toolbar_update);
         btnConfirm.setOnClickListener(view -> {
             ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
-            holder.updateName();
-            Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
-            holder.setEditModeItemLayout(false);
-            itemListAdapter.setSelectionMode(false);
-            itemListAdapter.setEditMode(false);
-            itemListAdapter.clearSelection();
-            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            if (holder.updateName()){
+                Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
+                holder.setEditModeItemLayout(false);
+                holder.setSelected(false);
+                itemListAdapter.setSelectionMode(false);
+                itemListAdapter.setEditMode(false);
+                itemListAdapter.clearSelection();
+                changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            }
             InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });

@@ -116,13 +116,15 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
         btnConfirm = findViewById(R.id.btn_toolbar_update);
         btnConfirm.setOnClickListener(view -> {
             ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
-            holder.updateName();
-            Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
-            holder.setEditModeItemLayout(false);
-            listListAdapter.setSelectionMode(false);
-            listListAdapter.setEditMode(false);
-            listListAdapter.clearSelection();
-            changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            if (holder.updateName()) {
+                Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
+                holder.setEditModeItemLayout(false);
+                holder.setSelected(false);
+                listListAdapter.setSelectionMode(false);
+                listListAdapter.setEditMode(false);
+                listListAdapter.clearSelection();
+                changeToolbar(MultiToolbarActivity.DEFAULT_TOOLBAR);
+            }
             InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });
@@ -166,11 +168,11 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
         btnEdit.setOnClickListener(view -> {
             ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
-            holder.setEditModeItemLayout(!editMode);
+            holder.setEditModeItemLayout(true);
             btnConfirm.setVisibility(View.VISIBLE);
             btnEdit.setVisibility(View.INVISIBLE);
             btnDelete.setVisibility(View.INVISIBLE);
-            setEditMode(!editMode);
+            setEditMode(true);
         });
 
     }

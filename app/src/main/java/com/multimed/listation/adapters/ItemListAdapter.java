@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,6 @@ import com.multimed.listation.MainActivity;
 import com.multimed.listation.R;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
-import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.ArrayList;
@@ -59,6 +59,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
         holder.setId(localDataBase.getInt(0));
         holder.getLblName().setText(localDataBase.getString(1));
+        holder.getInputName().setText(localDataBase.getString(1));
         holder.getLblAmount().setText(localDataBase.getInt(2) + "");
         holder.getCheckBox().setChecked(localDataBase.getInt(4) == 1);
         holder.setPosition(position);
@@ -145,6 +146,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             this.position = position;
         }
 
+        public EditText getInputName() {
+            return inputName;
+        }
 
         @SuppressLint("SetTextI18n")
         @Override
@@ -269,6 +273,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             if (editModeItemLayout){
                 lblName.setVisibility(View.INVISIBLE);
                 inputName.setVisibility(View.VISIBLE);
+                inputName.setSelection(inputName.length());
             } else {
                 lblName.setVisibility(View.VISIBLE);
                 inputName.setVisibility(View.INVISIBLE);
@@ -281,15 +286,23 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             }
         }
 
-        public void updateName() {
+        public boolean updateName() {
             String newName = inputName.getText().toString();
-            lblName.setText(newName);
+            if (newName.equals("")){
+                inputName.setHint("Nombre Vacio");
+            } else if (newName.length() > 15){
+                Toast.makeText(context, "Su nombre de producto es demasiado largo", Toast.LENGTH_LONG).show();
+            } else {
+                lblName.setText(newName);
 
-            ItemController.updateItemName(conn, id, newName);
+                ItemController.updateItemName(conn, id, newName);
 
-            clearSelection();
-            View view = itemView.findViewById(R.id.item_background_layout);
-            view.setBackgroundResource(R.color.white);
+                clearSelection();
+                View view = itemView.findViewById(R.id.item_background_layout);
+                view.setBackgroundResource(R.color.white);
+                return true;
+            }
+            return false;
         }
     }
 }

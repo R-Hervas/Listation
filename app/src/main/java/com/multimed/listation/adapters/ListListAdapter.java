@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -104,7 +105,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         selectedPositions.clear();
     }
 
-
     public void setSelectionMode(boolean selectionMode) {
         this.selectionMode = selectionMode;
     }
@@ -136,15 +136,23 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
             itemView.setOnLongClickListener(this);
         }
 
-        public void updateName() {
+        public boolean updateName() {
             String newName = inputName.getText().toString();
-            lblName.setText(newName);
+            if (newName.equals("")){
+                inputName.setHint("Nombre Vacio");
+            } else if (newName.length() > 15){
+                Toast.makeText(context, "Su nombre de lista es demasiado largo", Toast.LENGTH_LONG).show();
+            } else {
+                lblName.setText(newName);
 
-            ListController.updateListName(conn, id, newName);
+                ListController.updateListName(conn, id, newName);
 
-            clearSelection();
-            View view = itemView.findViewById(R.id.list_background_layout);
-            view.setBackgroundResource(R.color.white);
+                clearSelection();
+                View view = itemView.findViewById(R.id.list_background_layout);
+                view.setBackgroundResource(R.color.white);
+                return true;
+            }
+            return false;
         }
 
         // GETTERS n SETTERS -------------------------------------------------------------------
@@ -185,6 +193,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
                 lblName.setVisibility(View.INVISIBLE);
                 lblNumberItems.setVisibility(View.INVISIBLE);
                 inputName.setVisibility(View.VISIBLE);
+                inputName.setSelection(inputName.length());
             } else {
                 lblName.setVisibility(View.VISIBLE);
                 lblNumberItems.setVisibility(View.VISIBLE);
