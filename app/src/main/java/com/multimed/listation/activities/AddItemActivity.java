@@ -32,6 +32,7 @@ public class AddItemActivity extends AppCompatActivity {
     SQLiteConnectionHelper conn;
 
     Integer listId;
+    String listName;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -43,6 +44,7 @@ public class AddItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         listId = getIntent().getExtras().getInt("LIST_ID");
+        listName = getIntent().getExtras().getString("LIST_NAME");
 
         conn = new SQLiteConnectionHelper(this, "db_lists", null, 1);
 
@@ -79,6 +81,7 @@ public class AddItemActivity extends AppCompatActivity {
         Intent intent = new Intent(AddItemActivity.this, ListActivity.class);
         Bundle b = new Bundle();
         b.putInt("LIST_ID", listId);
+        b.putString("LIST_NAME", listName);
         intent.putExtras(b);
 
         btnExit.setOnClickListener(view -> startActivity(intent));
@@ -108,6 +111,7 @@ public class AddItemActivity extends AppCompatActivity {
             ItemController.createNewItem(conn, inputNewItemName.getText().toString(), listId);
             Bundle bundle = new Bundle();
             bundle.putInt("LIST_ID", listId);
+            bundle.putString("LIST_NAME", listName);
             startActivity(new Intent(AddItemActivity.this, ListActivity.class).putExtras(bundle));
         }
     }
@@ -117,6 +121,7 @@ public class AddItemActivity extends AppCompatActivity {
         Log.d("CDA", "onBackPressed Called");
         Bundle bundle = new Bundle();
         bundle.putInt("LIST_ID", listId);
+        bundle.putString("LIST_NAME", listName);
         startActivity(new Intent(AddItemActivity.this, ListActivity.class).putExtras(bundle));
     }
 

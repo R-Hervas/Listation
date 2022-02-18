@@ -289,9 +289,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
         public boolean updateName() {
             String newName = inputName.getText().toString();
             if (newName.equals("")){
-                inputName.setHint("Nombre Vacio");
+                inputName.setHint(R.string.Empty_Name);
             } else if (newName.length() > 15){
-                Toast.makeText(context, "Su nombre de producto es demasiado largo", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.tooLrg_Name_warning_item, Toast.LENGTH_LONG).show();
             } else {
                 lblName.setText(newName);
 

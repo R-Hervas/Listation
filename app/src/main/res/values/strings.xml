@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name">Listation</string>
-    <string name="default_list_name">Lista</string>
+    <string name="default_list_name">New List</string>
     <string name="default_item_count">0</string>
     <string name="todo">TODO</string>
     <string name="lbl_item_name_default">Not found</string>
     <string name="lbl_item_amount_default">0</string>
     <string name="floatbtn_item_add_desc">Creating a new item</string>
-    <string name="btn_create">Crear</string>
-    <string name="cancel_create_desc">Boton para salir de la pantalla</string>
-    <string name="input_new_item_hint">Nuevo Producto</string>
-    <string name="input_new_list_desc">Nueva lista</string>
-    <string name="input_list_name_str">Nuevo Nombre</string>
+    <string name="btn_create">Create</string>
+    <string name="cancel_create_desc">Button to exit</string>
+    <string name="input_new_item_hint">New item</string>
+    <string name="input_new_list_desc">New List</string>
+    <string name="input_list_name_str">New Name</string>
     <string name="input_item_name_str">New Name</string>
+    <string name="deleted_toast_msg">Deleted </string>
+    <string name="products"> items</string>
+    <string name="err_gen_msg">An error has occured</string>
+    <string name="updates_list_msg">List Updated</string>
+    <string name="Empty_Name">Empty Name</string>
+    <string name="tooLrg_Name_warning_item">The item name is too long</string>
+    <string name="tooLrg_Name_warning_list">The list name is too long</string>
 </resources>

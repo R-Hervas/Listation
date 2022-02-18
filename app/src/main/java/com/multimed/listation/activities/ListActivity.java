@@ -22,6 +22,7 @@ import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
+import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.Objects;
@@ -40,6 +41,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     SQLiteConnectionHelper conn;
 
     Integer idList;
+    String listName;
 
     //MODES
     boolean editMode;
@@ -50,7 +52,11 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+
         idList = getIntent().getExtras().getInt("LIST_ID");
+        listName = getIntent().getExtras().getString("LIST_NAME");
+
+        getSupportActionBar().setTitle(listName);
 
         setup();
     }
@@ -59,7 +65,6 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
     private void setup() {
 
         conn = new SQLiteConnectionHelper(this, "db_lists", null, 1);
-
 
         btnCreateItem = findViewById(R.id.btn_item_add);
         btnCreateItem.setOnClickListener(view -> {
@@ -94,7 +99,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         btnDelete = findViewById(R.id.btn_toolbar_delete);
         btnDelete .setOnClickListener(view -> {
             int itemsDeleted  = ItemController.deleteItemsById(conn, itemListAdapter.getSelectedItems());
-            Toast.makeText(this, "Se han eliminado " + itemsDeleted + " productos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.deleted_toast_msg) + itemsDeleted + getString(R.string.products), Toast.LENGTH_SHORT).show();
 
             itemDataSet = null;
             itemDataSet = ItemController.getItemsByList(idList, conn);
@@ -120,7 +125,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
                 btnDelete.setVisibility(View.INVISIBLE);
                 setEditMode(true);
             } else {
-                Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.err_gen_msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -136,7 +141,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         btnConfirm.setOnClickListener(view -> {
             ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
             if (holder.updateName()){
-                Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.updates_list_msg, Toast.LENGTH_SHORT).show();
                 holder.setEditModeItemLayout(false);
                 holder.setSelected(false);
                 itemListAdapter.setSelectionMode(false);

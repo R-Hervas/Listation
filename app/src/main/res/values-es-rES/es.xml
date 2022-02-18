@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Listation</string>
+    <string name="default_list_name">Nueva Lista</string>
+    <string name="default_item_count">0</string>
+    <string name="todo">TODO</string>
+    <string name="lbl_item_name_default">No encontrado</string>
+    <string name="lbl_item_amount_default">0</string>
+    <string name="floatbtn_item_add_desc">Crear un nuevo producto</string>
+    <string name="btn_create">Crear</string>
+    <string name="cancel_create_desc">Boton para salir</string>
+    <string name="input_new_item_hint">Nuevo item</string>
+    <string name="input_new_list_desc">Nueva Lista</string>
+    <string name="input_list_name_str">Nuevo Nombre</string>
+    <string name="input_item_name_str">Nuevo Nombre</string>
+    <string name="deleted_toast_msg">Borrados </string>
+    <string name="products"> productos</string>
+    <string name="err_gen_msg">Ha ocurrido un error</string>
+    <string name="updates_list_msg">Lista actualizada</string>
+    <string name="Empty_Name">Nombre vacio</string>
+    <string name="tooLrg_Name_warning_item">El nombre de producto es muy largo</string>
+    <string name="tooLrg_Name_warning_list">El nombre de lista es muy largo</string>
+</resources>

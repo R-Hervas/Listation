@@ -139,9 +139,9 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         public boolean updateName() {
             String newName = inputName.getText().toString();
             if (newName.equals("")){
-                inputName.setHint("Nombre Vacio");
+                inputName.setHint(R.string.Empty_Name);
             } else if (newName.length() > 15){
-                Toast.makeText(context, "Su nombre de lista es demasiado largo", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.tooLrg_Name_warning_list, Toast.LENGTH_LONG).show();
             } else {
                 lblName.setText(newName);
 
@@ -211,6 +211,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("LIST_ID", id);
+                    bundle.putString("LIST_NAME", lblName.getText().toString());
 
                     intent.putExtras(bundle);
 
