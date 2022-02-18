@@ -14,9 +14,10 @@
     <string name="input_item_name_str">New Name</string>
     <string name="deleted_toast_msg">Deleted </string>
     <string name="products"> items</string>
-    <string name="err_gen_msg">An error has occured</string>
+    <string name="err_gen_msg">An error has occurred</string>
     <string name="updates_list_msg">List Updated</string>
     <string name="Empty_Name">Empty Name</string>
     <string name="tooLrg_Name_warning_item">The item name is too long</string>
     <string name="tooLrg_Name_warning_list">The list name is too long</string>
+    <string name="create_list_msg">Creating a new list</string>
 </resources>

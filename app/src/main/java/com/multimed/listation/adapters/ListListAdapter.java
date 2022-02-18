@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +63,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         return new ListViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
         localDataBase.moveToFirst();
@@ -222,7 +222,7 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
 
                     selectList(id, position);
 
-                } else if (selected) {
+                } else {
 
                     deselectList(id, position);
 
@@ -258,8 +258,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         /**
          * Selects an item from list (Includes add it from selection lists, change background, update Edit)
          *
-         * @param id
-         * @param position
          */
         public void selectList(int id, int position) {
             View view = itemView.findViewById(R.id.list_background_layout);
@@ -281,8 +279,6 @@ public class ListListAdapter extends RecyclerView.Adapter<ListListAdapter.ListVi
         /**
          * Deselects an item from list (Includes remove it from selection lists, change background, update Edit)
          *
-         * @param id
-         * @param position
          */
         public void deselectList(int id, int position) {
             View view = itemView.findViewById(R.id.list_background_layout);

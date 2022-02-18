@@ -14,7 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="27dp">
+            android:layout_marginHorizontal="27dp"
+            tools:ignore="UselessParent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_recycleview"
@@ -31,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="Creating a new list"
+        android:contentDescription="@string/create_list_msg"
         android:foregroundGravity="right|bottom"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_list_add"
         app:layout_constraintEnd_toEndOf="@+id/btn_list_add"
         app:layout_constraintStart_toStartOf="@+id/btn_list_add"
-        app:layout_constraintTop_toTopOf="@+id/btn_list_add"></View>
+        app:layout_constraintTop_toTopOf="@+id/btn_list_add" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

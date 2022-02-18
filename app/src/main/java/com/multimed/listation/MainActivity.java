@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
     /**
      * On Create
      *
-     * @param savedInstanceState
      */
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
         btnConfirm = findViewById(R.id.btn_toolbar_update);
         btnConfirm.setOnClickListener(view -> {
             ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
-            if (holder.updateName()) {
+            if (Objects.requireNonNull(holder).updateName()) {
                 Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show();
                 holder.setEditModeItemLayout(false);
                 holder.setSelected(false);
@@ -168,18 +167,18 @@ public class MainActivity extends AppCompatActivity implements MultiToolbarActiv
 
         btnEdit.setOnClickListener(view -> {
             ListListAdapter.ListViewHolder holder = ((ListListAdapter.ListViewHolder) listRecyclerView.findViewHolderForAdapterPosition(listListAdapter.getSelectedPositions().get(0)));
-            holder.setEditModeItemLayout(true);
+            Objects.requireNonNull(holder).setEditModeItemLayout(true);
             btnConfirm.setVisibility(View.VISIBLE);
             btnEdit.setVisibility(View.INVISIBLE);
             btnDelete.setVisibility(View.INVISIBLE);
-            setEditMode(true);
+            setEditMode();
         });
 
     }
 
-    private void setEditMode(boolean b) {
-        editMode = b;
-        listListAdapter.setEditMode(b);
+    private void setEditMode() {
+        editMode = true;
+        listListAdapter.setEditMode(true);
     }
 
 }

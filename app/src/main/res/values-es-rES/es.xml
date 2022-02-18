@@ -20,4 +20,5 @@
     <string name="Empty_Name">Nombre vacio</string>
     <string name="tooLrg_Name_warning_item">El nombre de producto es muy largo</string>
     <string name="tooLrg_Name_warning_list">El nombre de lista es muy largo</string>
+    <string name="create_list_msg">Creating a new list</string>
 </resources>

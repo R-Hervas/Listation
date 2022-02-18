@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_item_add"
         app:layout_constraintEnd_toEndOf="@+id/btn_item_add"
         app:layout_constraintStart_toStartOf="@+id/btn_item_add"
-        app:layout_constraintTop_toTopOf="@+id/btn_item_add"></View>
+        app:layout_constraintTop_toTopOf="@+id/btn_item_add" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

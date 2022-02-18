@@ -51,8 +51,10 @@
                 android:hint="@string/input_item_name_str"
                 android:textAppearance="@style/item_name"
 
-                android:visibility="invisible" />
-            />
+                android:visibility="invisible"
+                android:autofillHints=""
+                android:inputType="text" />
+
 
         </RelativeLayout>
 
@@ -69,7 +71,9 @@
             android:background="@drawable/shape_round_btn"
             android:src="@drawable/ic_btn_lower"
 
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:contentDescription="@string/todo"
+            tools:ignore="ContentDescription" />
 
         <RelativeLayout
             android:layout_width="40dp"
@@ -97,7 +101,9 @@
 
                 android:src="@drawable/ic_btn_check"
                 android:visibility="invisible"
-                app:tint="@color/everyday_green" />
+                app:tint="@color/everyday_green"
+                android:contentDescription="@string/todo"
+                tools:ignore="ContentDescription" />
 
         </RelativeLayout>
 
@@ -112,10 +118,11 @@
             android:layout_marginHorizontal="2dp"
 
             android:background="@drawable/shape_round_btn"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/todo"
 
             android:src="@drawable/ic_btn_highup"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="ContentDescription" />
 
 
     </LinearLayout>

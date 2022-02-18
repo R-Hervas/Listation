@@ -68,7 +68,6 @@ public class ItemController {
 
 
         values.put(Utilities.FIELD_NAME, name);
-        int i = db.update(Utilities.TABLE_ITEM, values, Utilities.FIELD_ID + " = ? ", parameters);
 
         db.close();
 

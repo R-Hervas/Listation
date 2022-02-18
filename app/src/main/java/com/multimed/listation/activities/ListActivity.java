@@ -22,7 +22,6 @@ import com.multimed.listation.R;
 import com.multimed.listation.adapters.ItemListAdapter;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.controllers.ItemController;
-import com.multimed.listation.controllers.ListController;
 import com.multimed.listation.support.MultiToolbarActivity;
 
 import java.util.Objects;
@@ -56,7 +55,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         idList = getIntent().getExtras().getInt("LIST_ID");
         listName = getIntent().getExtras().getString("LIST_NAME");
 
-        getSupportActionBar().setTitle(listName);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(listName);
 
         setup();
     }
@@ -123,16 +122,16 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
                 btnConfirm.setVisibility(View.VISIBLE);
                 btnEdit.setVisibility(View.INVISIBLE);
                 btnDelete.setVisibility(View.INVISIBLE);
-                setEditMode(true);
+                setEditMode();
             } else {
                 Toast.makeText(this, R.string.err_gen_msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setEditMode(boolean b) {
-        editMode = b;
-        itemListAdapter.setEditMode(b);
+    private void setEditMode() {
+        editMode = true;
+        itemListAdapter.setEditMode(true);
     }
 
     @Override
@@ -140,7 +139,7 @@ public class ListActivity extends AppCompatActivity implements MultiToolbarActiv
         btnConfirm = findViewById(R.id.btn_toolbar_update);
         btnConfirm.setOnClickListener(view -> {
             ItemListAdapter.ItemViewHolder holder = ((ItemListAdapter.ItemViewHolder) itemRecyclerView.findViewHolderForAdapterPosition(itemListAdapter.getSelectedPositions().get(0)));
-            if (holder.updateName()){
+            if (Objects.requireNonNull(holder).updateName()){
                 Toast.makeText(this, R.string.updates_list_msg, Toast.LENGTH_SHORT).show();
                 holder.setEditModeItemLayout(false);
                 holder.setSelected(false);

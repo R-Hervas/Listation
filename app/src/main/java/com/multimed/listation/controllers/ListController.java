@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import com.multimed.listation.connection.SQLiteConnectionHelper;
 import com.multimed.listation.utilities.Utilities;
 
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 
 public class ListController {
@@ -47,7 +46,6 @@ public class ListController {
 
 
         values.put(Utilities.FIELD_NAME, name);
-        int i = db.update(Utilities.TABLE_LIST, values, Utilities.FIELD_ID + " = ? ", parameters);
 
         db.close();
 
